@@ -1,0 +1,7 @@
+# Ignore everything
+*
+
+# Whitelist
+!.gitignore
+!*.yaml
+!*.md
