@@ -4,5 +4,5 @@
 # Whitelist
 !.gitignore
 !*.md
-
 !configuration.yaml
+!ui-lovelace.yaml

@@ -25,4 +25,15 @@ google_assistant:
     - light
     - group
     - scene
-    - media_player    
+    - media_player
+
+# iPad dashboard
+lovelace:
+  mode: storage
+  dashboards:
+    lovelace-yaml:
+      mode: yaml
+      title: Tablet
+      icon: mdi:tablet
+      show_in_sidebar: true
+      filename: ui-lovelace.yaml
