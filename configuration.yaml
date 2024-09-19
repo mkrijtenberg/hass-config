@@ -1,0 +1,28 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Cloudflare allow reversed proxy
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.30.33.0/24
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Google assistant
+google_assistant:
+  project_id: !secret google_project_id
+  service_account: !include SERVICE_ACCOUNT.JSON
+  report_state: true
+  exposed_domains:
+    - light
+    - group
+    - scene
+    - media_player    

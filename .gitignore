@@ -3,5 +3,6 @@
 
 # Whitelist
 !.gitignore
-!*.yaml
 !*.md
+
+!configuration.yaml
