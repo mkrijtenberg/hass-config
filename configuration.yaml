@@ -16,6 +16,19 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
+# Roborock Garage control
+rest_command:
+  roborock_open:
+    url: !secret roborock_nodemcu_url
+    method: POST
+    content_type: "application/x-www-form-urlencoded"
+    payload: "value=135"
+  roborock_close:
+    url: !secret roborock_nodemcu_url
+    method: POST
+    content_type: "application/x-www-form-urlencoded"
+    payload: "value=0"
+
 # Google assistant
 google_assistant:
   project_id: !secret google_project_id
@@ -26,6 +39,32 @@ google_assistant:
     - group
     - scene
     - media_player
+
+# Alpha Innotec warmtepomp integratie
+luxtronik:
+  host: !secret luxtronik_ip
+  port: !secret luxtronik_port
+  
+# Custom Sensors
+sensor:
+
+    # Alpha Innotec warmtepomp
+  - platform: luxtronik
+    sensors:
+      - group: calculations
+        id: ID_WEB_Temperatur_TA
+        friendly_name: Luxtronik Temperatuur buiten
+
+      - group: calculations
+        id: ID_WEB_RBE_RT_Ist
+        friendly_name: Luxtronik Ruimte temperatuur nu
+
+      - group: calculations
+        id: ID_WEB_WP_BZ_akt
+        friendly_name: Luxtronik Toestand  
+
+# iPad dashboard sidebar
+template: !include sidebar.yaml
 
 # iPad dashboard
 lovelace:

@@ -2,11 +2,16 @@
 kiosk_mode:
   user_settings:
     - users:
+        - "maurice"
         - "tablet"
       hide_header: true
 
+button_card_templates:
+  !include_dir_merge_named button_card_templates
+
 views:
   - type: custom:grid-layout
+    background: center / cover no-repeat fixed url('/local/background.png')
     title: Home
     layout:
       margin: 0
@@ -18,3 +23,18 @@ views:
         "sidebar  floor    floor    calendar   ."
         "sidebar  floor    floor    calendar   ."
         "sidebar  footer   footer   footer     ."
+    cards:
+
+      #################################################
+      #                                               #
+      #                    SIDEBAR                    #
+      #                                               #
+      #################################################
+
+      - type: vertical-stack
+        view_layout:
+          grid-area: sidebar
+        cards:
+          - type: custom:button-card
+            entity: sensor.template_sidebar
+            template: sidebar

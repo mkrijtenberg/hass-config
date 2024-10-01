@@ -8,3 +8,6 @@ I use the following addons (you may need them if you want to use my configuratio
 * From HACS, I installed the following addon(s)
     * [kiosk-mode](https://github.com/NemesisRE/kiosk-mode)
     * [layout-card](https://github.com/thomasloven/lovelace-layout-card)
+    * [button-card](https://github.com/custom-cards/button-card)
+    * [card-mod](https://github.com/thomasloven/lovelace-card-mod)
+    

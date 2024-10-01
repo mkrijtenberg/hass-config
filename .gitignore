@@ -4,5 +4,15 @@
 # Whitelist
 !.gitignore
 !*.md
+!*.png
 !configuration.yaml
+!sidebar.yaml
 !ui-lovelace.yaml
+
+!button_card_templates/
+
+!www/
+!www/images/
+!www/images/*
+!www/images/floorplan/
+!www/images/floorplan/*
