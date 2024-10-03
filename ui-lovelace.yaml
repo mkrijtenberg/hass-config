@@ -7,19 +7,85 @@ kiosk_mode:
       hide_header: true
 
 button_card_templates:
-  !include_dir_merge_named button_card_templates
+  # !include_dir_merge_named button_card_templates
+  warning_sign:
+    show_name: false
+    show_entity_picture: true
+    entity_picture: /local/images/alert.png
+    state:
+      - value: 'off'
+        styles:
+          card:
+            - filter: opacity(0%)
+    styles:
+      card:
+        - background: transparent
+        - border: none
+
+  sidebar:
+    show_state: false
+    show_icon: false
+    tap_action:
+      action: none
+    name: >
+      [[[
+        if (entity) {
+            let attr = [];
+            for (let [k, value] of Object.entries(entity.attributes)) {
+              value !== false && (attr += `<p>${value}</p>`);
+            }
+            return attr;
+        }
+      ]]]
+    extra_styles: >
+      #card {
+        padding: 0;
+        border-width: 0;
+      }
+      #container {
+        display: flex !important;
+      }
+      #name {
+        padding: 1vw 2.5vw 0 3.3vw;
+        white-space: normal;
+        text-align: left;
+      }
+      .time {
+        font-size: 5.2vw;
+        font-weight: 300;
+        line-height: 4.3vw;
+        letter-spacing: 0.11vw;
+        margin-left: -0.3vw;
+        color: var(--primary-text-color);
+        opacity: 0.8;
+      }
+      p {
+        font-size: 1.42vw;
+        line-height: 2vw;
+        font-weight: 200;
+        letter-spacing: 0.07vw;
+        color: #6a7377;
+      }
+      b {
+        font-weight: 700;
+      }
+      p > b {
+        color: var(--primary-text-color);
+        opacity: 0.8;
+      }
+    
 
 views:
   - type: custom:grid-layout
-    background: center / cover no-repeat fixed url('/local/background.png')
+    # background: center / cover no-repeat fixed url('/local/images/background.png')
     title: Home
     layout:
       margin: 0
-      grid-gap: var(--custom-layout-card-padding)
+      grid-gap: 3.3vw
       grid-template-columns: repeat(4, 1fr) 0
       grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
       grid-template-areas: |
-        "sidebar  .        .        .          ."
+        "sidebar  .        .        calendar   ."
         "sidebar  floor    floor    calendar   ."
         "sidebar  floor    floor    calendar   ."
         "sidebar  footer   footer   footer     ."
@@ -38,3 +104,515 @@ views:
           - type: custom:button-card
             entity: sensor.template_sidebar
             template: sidebar
+            card_mod:
+              style: |
+                ha-card {
+                  border: none;
+                  box-shadow: none;
+                  background-color: transparent !important;
+                }            
+
+      #################################################
+      #                                               #
+      #                  FLOORPLAN                    #
+      #                                               #
+      #################################################
+
+      - type: grid
+        view_layout:
+          grid-area: floor
+        columns: 1
+        cards:
+          - type: picture-elements
+            image: /local/images/floorplan/floorplan_night.png
+            card_mod:
+              style: |
+                ha-card {
+                  border: none;
+                  box-shadow: none;
+                  background-color: transparent !important;
+                }
+            elements:
+                #########################    DAY BASE FLOORPLAN OVERLAY    #########################
+
+              - type: image
+                action: none
+                entity: sun.sun
+                hold_action:
+                  action: none
+                state_image:
+                  above_horizon: /local/images/floorplan/floorplan_day.png
+                  below_horizon: /local/images/pixel.png
+                style:
+                  height: 100%
+                  left: 50%
+                  mix-blend-mode: lighten
+                  #'${ states[''sensor.sunlight_opacity''].state }'
+                  opacity: 1
+                  top: 50%
+                  width: 100%
+                tap_action:
+                  action: none            
+
+                #########################    INDIVIDUAL LIGHTS - BLENDED IMAGE OVERLAYS    #########################
+                
+              - type: image
+                action: none
+                entity: light.keuken_eettafel
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/eettafel.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none                 
+
+              - type: image
+                action: none
+                entity: light.keuken_nis
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/keuken.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.woonkamer_hk_living
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/hk_living.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.cinewall_lightstrip
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/cinewall_lightstrip.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.cinewall_kastverlichting
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/cinewall_kast.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.woonkamer_hoeklamp
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/hoeklamp.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.hal_spot_1
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/hal_spot_1.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none                  
+
+              - type: image
+                action: none
+                entity: light.hal_spot_2
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/hal_spot_2.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.shelly_hal1
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/hal.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none                  
+
+              - type: image
+                action: none
+                entity: light.toilet_hanglamp
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/toilet.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.bijkeuken_spot_1
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/bijkeuken_spot_1.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.bijkeuken_spot_2
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/bijkeuken_spot_2.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.bijkeuken_spot_3
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/bijkeuken_spot_3.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+              - type: image
+                action: none
+                entity: light.bijkeuken_spot_4
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/bijkeuken_spot_4.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none  
+
+              - type: image
+                action: none
+                entity: light.garage
+                hold_action:
+                  action: none
+                image: /local/images/floorplan/lights/garage.png
+                state_filter:
+                  "on": opacity(100%)
+                  "off": opacity(0)
+                style:
+                  left: 50%
+                  mix-blend-mode: lighten
+                  top: 50%
+                  height: 100%
+                  width: 100%
+                tap_action:
+                  action: none
+
+                #########################    DOORS    #########################
+
+              - type: custom:button-card
+                entity: binary_sensor.hal_voordeur_contact
+                template: warning_sign
+                style:
+                  top: 59%
+                  left: 64%
+
+              - entity: binary_sensor.woonkamer_gangdeur_contact
+                type: custom:button-card
+                template: warning_sign
+                style:
+                  top: 56%
+                  left: 30%
+
+              - entity: binary_sensor.bijkeuken_achterdeur_contact
+                type: custom:button-card
+                template: warning_sign
+                style:
+                  top: 4%
+                  left: 71%
+
+              - entity: binary_sensor.keuken_keukendeur_contact
+                type: custom:button-card
+                template: warning_sign
+                style:
+                  top: 10%
+                  left: 64%
+
+              - entity: binary_sensor.bijkeuken_tussendeur_contact
+                type: custom:button-card
+                template: warning_sign
+                style:
+                  top: 25%
+                  left: 81%
+
+              - entity: binary_sensor.keuken_tuindeur_contact
+                type: custom:button-card
+                template: warning_sign
+                style:
+                  top: 4%
+                  left: 35%
+
+                #########################    TEMPERATURE    #########################
+
+              - type: state-label
+                entity: sensor.luxtronik_ruimte_temperatuur_nu
+                style:
+                  top: 58%
+                  left: 22%
+                  font-size: 1.5vw
+                  color: white
+
+              - type: state-label
+                entity: sensor.luxtronik_temperatuur_buiten
+                style:
+                  top: 58%
+                  left: 72%
+                  font-size: 1.5vw
+                  color: var(--primary-text-color);
+
+              - type: state-label
+                entity: sensor.bijkeuken_temperatuur_temperature
+                style:
+                  top: 20%
+                  left: 74%
+                  font-size: 1.5vw
+                  color: white
+
+
+                #########################    VOLVO    #########################
+
+              - type: image
+                image: /local/images/volvo_xc40.png
+                entity: sensor.volvo_battery_charge_level
+                style:
+                  top: 80%
+                  left: 84%
+                  width: 25%
+
+              - entity: lock.volvo_lock_status
+                type: custom:button-card
+                template: warning_sign
+                state:
+                  - value: locked
+                    styles:
+                      card:
+                        - filter: opacity(0%)
+                style:
+                  top: 77%
+                  left: 84%
+
+
+              - type: custom:button-card
+                entity: sensor.volvo_charging_system_status
+                state_display: |
+                  [[[
+                    const level = Math.round(states["sensor.volvo_battery_charge_level"].state)
+                    return level + '%'
+                  ]]]
+                icon: |
+                  [[[
+                    let infix = "";
+                    if (entity.state === 'Charging') {
+                      infix = '-charging';
+                    }
+                    let icon = "mdi:help-circle-outline";
+                    const battery_level = Math.round(states["sensor.volvo_battery_charge_level"].state)
+                    if (battery_level == 100) {
+                      icon = "mdi:battery";
+                    } else if (battery_level < 10) {
+                      icon = "mdi:battery" + infix + "-outline";
+                    } else if (battery_level == "unknown" || battery_level == "unavailable") {
+                      icon = "mdi:battery-off";
+                    } else {
+                      icon = "mdi:battery" + infix + "-" + Math.floor(battery_level / 10) * 10;
+                    }
+                    return icon;
+                  ]]]
+                show_state: true
+                show_name: false
+                layout: icon_state
+                state:
+                  - value: Charging
+                    color: var(--success-color)
+                style:
+                  top: 93%
+                  left: 84%
+                size: 70%
+                styles:
+                  state:
+                    - justify-self: start
+                    - color: white
+                  card:
+                    - font-size: 1.5vw
+                    - background: transparent
+                    - border: none
+                  icon:
+                    - color: white
+
+
+      #################################################
+      #                                               #
+      #                    CALENDAR                   #
+      #                                               #
+      #################################################
+
+      - type: grid
+        title: Agenda
+        view_layout:
+          grid-area: calendar
+        columns: 1
+        cards:
+          - type: custom:week-planner-card
+            calendars:
+              - entity: !secret calendar_1
+                color: '#448AFF'
+              - entity: !secret calendar_2
+                color: '#FF80AB'
+              - entity: !secret calendar_3
+                color: '#FFEA00'
+            days: 3
+            texts:
+              fullDay: Hele dag
+              today: Vandaag
+              tomorrow: Morgen
+              monday: Ma
+              tuesday: Di
+              wednesday: Woe
+              thursday: Do
+              friday: Vr
+              saturday: Za
+              sunday: Zo
+              noEvents: '-'
+            card_mod:
+              style: |
+                ha-card {
+                  border: none;
+                  box-shadow: none;
+                  background-color: transparent !important;
+                }
+                .event {
+                  background-color: transparent !important;
+                }
+                .title {
+                  font-size: 130%;
+                  font-weight: 500;
+                  line-height: 1.2;
+                }

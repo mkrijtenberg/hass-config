@@ -10,4 +10,5 @@ I use the following addons (you may need them if you want to use my configuratio
     * [layout-card](https://github.com/thomasloven/lovelace-layout-card)
     * [button-card](https://github.com/custom-cards/button-card)
     * [card-mod](https://github.com/thomasloven/lovelace-card-mod)
-    
+    * [week-planner-card](https://github.com/FamousWolf/week-planner-card)
+
