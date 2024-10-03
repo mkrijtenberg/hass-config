@@ -1,0 +1,13 @@
+warning_sign:
+  show_name: false
+  show_entity_picture: true
+  entity_picture: /local/images/alert.png
+  state:
+    - value: 'off'
+      styles:
+        card:
+          - filter: opacity(0%)
+  styles:
+    card:
+      - background: transparent
+      - border: none

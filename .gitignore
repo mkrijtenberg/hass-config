@@ -10,6 +10,7 @@
 !ui-lovelace.yaml
 
 !button_card_templates/
+!button_card_templates/*
 
 !www/
 !www/images/
